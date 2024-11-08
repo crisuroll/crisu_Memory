@@ -1,8 +1,13 @@
 ###################################################################
 import random
+from player import Player
 ###################################################################
 
 class Board:
+    '''
+    constructor. receives rows and columns.
+    attributes rows, columns, hiddenBoard, pairsBoard, maxPoints
+    '''
     def __init__(self, filas, columnas):
         self.filas = filas
         self.columnas = columnas
@@ -11,8 +16,11 @@ class Board:
         self.max_points = (self.filas * self.columnas) // 2
         self.crear_tablero_oculto()
         self.crear_tablero_parejas()
+        self.memory = []
 
-    @staticmethod
+    '''
+    askSize() method. asks the user the number of rows and columns to create the board.
+    '''
     def pedir_dimensiones():
         while True:
             try:
@@ -27,6 +35,9 @@ class Board:
             except ValueError:
                 print("Error: Introduce un número válido.")
 
+    '''
+    createHiddenBoard() method. creates the board displayed to the player with no emojis.
+    '''
     def crear_tablero_oculto(self):
         for i in range(self.filas):
             fila = []
@@ -35,6 +46,9 @@ class Board:
             self.tablero_oculto.append(fila)
         return self.tablero_oculto
 
+    '''
+    createPairsBoard() method. creates the board the user has to guess.
+    '''
     def crear_tablero_parejas(self):
         emojis = [
             "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍",
@@ -53,27 +67,52 @@ class Board:
         
         return self.tablero_parejas
 
+    '''
+    showHidden() method. prints the board used to play.
+    '''
     def mostrarOculto(self):
         for i in self.tablero_oculto:
             print(" ".join(i))
 
+    '''
+    showEmojis() method. prints the solved board.
+    '''
+    def mostrarEmojis(self):
+        for i in self.tablero_parejas:
+            print(" ".join(i))
+
+    '''
+    show() method. prints the board with the new discovered card.
+    '''
     def mostrar(self, f, c):
         self.tablero_oculto[f][c] = self.tablero_parejas[f][c]
     
+    '''
+    hidden() method. hides a card if the player fails trying to guess a pair.
+    '''
     def ocultar(self, f, c):
         self.tablero_oculto[f][c] = "_"
     
+    '''
+    check() method. receives two rows and two columns. compares if the two cards given are the same.
+    '''
     def comprobar(self, f1, c1, f2, c2):
         if (self.tablero_parejas[f1][c1] == self.tablero_parejas[f2][c2]):
             return True
         else:
             return False
         
+    '''
+    isShown() method. receives row and column. checks if the card is already flipped.
+    '''
     def estaMostrado(self, f, c):
         if self.tablero_oculto[f][c] != "_":
             return True
         else:
             return False
 
+    '''
+    getMaxPoints() method. returns the max score. MAY MOVE THIS METHOD TO CLASS PLAYER.
+    '''
     def getMaxPoints(self):
         return self.max_points
