@@ -10,7 +10,7 @@ class Player:
         self.name = name
         self.score = 0
         self.nivel = nivel  # Nivel de dificultad, 0 para un jugador humano
-        self.memory = {} if nivel > 0 else None  # Memoria solo si es CPU
+        self.memory = dict() if nivel > 0 else None  # Memoria solo si es CPU
 
     # PREGUNTAR A HECTOR POR QUE NO ME FUNCIONA @property NI @setter
 
@@ -38,7 +38,7 @@ class Player:
     addCard() method. adds a card to the CPU memory from medium level and above.
     '''
     def recordar_carta(self, fila, columna, carta):
-        ''' Almacena una carta en la memoria en función del nivel de dificultad '''
+        print("Estado de memory antes de agregar:", self.memory)
         if self.nivel and self.nivel >= 2:
             self.memory[(fila, columna)] = carta
             if self.nivel == 2 and len(self.memory) > 2:
@@ -62,18 +62,10 @@ class Player:
     chooseRandom() method. chooses two random cards that are not revealed. easy level.
     '''
     def elegir_aleatorio(self, tablero):
-        descubiertas = set()
         while True:
-            fila1, col1 = randint(0, tablero.filas - 1), randint(0, tablero.columnas - 1)
-            if not tablero.estaMostrado(fila1, col1):
-                descubiertas.add((fila1, col1))
-                break
-
-        while True:
-            fila2, col2 = randint(0, tablero.filas - 1), randint(0, tablero.columnas - 1)
-            if not tablero.estaMostrado(fila2, col2) and (fila2, col2) not in descubiertas:
-                break
-        return (fila1, col1), (fila2, col2)
+            f, c = randint(0, tablero.filas - 1), randint(0, tablero.columnas - 1)
+            if not tablero.estaMostrado(f, c):
+                return f, c
 
 
     # REVISAR DIFICULTADES. NO TERMINADAS.
@@ -82,16 +74,26 @@ class Player:
     chooseWithMemory() method. chooses two cards. if a card is in the CPU memory, chooses it and tries to make a pair. 
     if it's medium level, the CPU only remembers the last two cards. if it's hard level, remembers all cards.
     '''
-    def elegir_con_memoria(self, tablero, limit=None):
+    def elegir_con_memoria(self, tablero):
         for (f1, c1), card1 in self.memory.items():
             for (f2, c2), card2 in self.memory.items():
-                if (f1, c1) != (f2, c2) and card1 == card2:
-                    return (f1, c1), (f2, c2)
+                if (f1, c1) != (f2, c2) and card1 == card2 and not tablero.estaMostrado(f1, c1) and not tablero.estaMostrado(f2, c2):
+                    return f1, c1
+
         return self.elegir_aleatorio(tablero)
 
     '''
     chooseExpert() method. the CPU memory remembers all cards and tries to make pairs strategically.
     '''
     def elegir_con_estrategia(self, tablero):
-        return
+        pareja = self.elegir_con_memoria(tablero)
+        if pareja:
+            return pareja
+
+        for f in range(tablero.filas):
+            for c in range(tablero.columnas):
+                if not tablero.estaMostrado(f, c) and (f, c) not in self.memory:
+                    return f, c
+
+        return self.elegir_aleatorio(tablero)
 

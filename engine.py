@@ -50,7 +50,8 @@ class Engine:
                 cpu.elegir_cartas(self.tablero)
                 self.jugadores.append(cpu)
             case 3:
-                nivel = 1
+                print("1. FÁCIL \n2. INTERMEDIO \n3. DIFÍCIL \n4. EXPERTO")
+                nivel = int(input("Elige la dificultad de ambas CPU: "))
                 self.jugadores.append(Player("CPU1", nivel))
                 self.jugadores.append(Player("CPU2", nivel))
             case _:
@@ -99,20 +100,20 @@ class Engine:
                 tablero.mostrar(f2, c2)
                 tablero.mostrarOculto()
             else: # CPU
-                (f1, c1), (f2, c2) = jugador.elegir_cartas(tablero)
-
+                f1, c1 = jugador.elegir_cartas(tablero)
                 print(f"{jugador.getName()} ha elegido como primera carta {f1 + 1}, {c1 + 1}:")
                 tablero.mostrar(f1, c1)
                 tablero.mostrarOculto()
-                time.sleep(2.5)
+                time.sleep(2)
+                f2, c2 = jugador.elegir_cartas(tablero)
                 print(f"{jugador.getName()} ha elegido como segunda carta {f2 + 1}, {c2 + 1}:")
                 tablero.mostrar(f2, c2)
                 tablero.mostrarOculto()
-                time.sleep(2.5)
+                time.sleep(2)
 
                 if jugador.nivel >= 2:
                     jugador.recordar_carta(f1, c1, self.tablero.tablero_parejas[f1][c1])
-                    jugador.recordar_carta(f1, c1, self.tablero.tablero_parejas[f2][c2])
+                    jugador.recordar_carta(f2, c2, self.tablero.tablero_parejas[f2][c2])
 
             if tablero.comprobar(f1, c1, f2, c2):
                 print("¡Correcto! Has encontrado una pareja.")
@@ -125,8 +126,8 @@ class Engine:
                 turno = 2 if turno == 1 else 1
 
             print(f"Puntuación {j1.getName()}: {j1.getScore()} - Puntuación {j2.getName()}: {j2.getScore()}")
+            time.sleep(2)
 
-        # Fin del juego y declaración del ganador
         print("\n¡Juego terminado!")
         if j1.score > j2.score:
             print(f"¡{j1.name} gana con {j1.score} puntos!")
