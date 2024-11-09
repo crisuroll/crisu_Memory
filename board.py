@@ -24,16 +24,16 @@ class Board:
     def pedir_dimensiones():
         while True:
             try:
-                filas = int(input("Dime el número de filas: "))
-                columnas = int(input("Dime el número de columnas: "))
+                filas = int(input("Please enter the number of rows: "))
+                columnas = int(input("Please enter the number of columns: "))
                 if (filas < 2 or filas > 6) or (columnas < 2 or columnas > 6) or (filas == 6 and columnas == 6):
-                    print("Error: Dimensiones deben estar entre 2x2 y 6x5. Vuelve a intentarlo.")
+                    print("Error: Board dimensions must be between 2x2 and 6x5 (also valid 5x6). Please try again.")
                 elif (filas * columnas) % 2 != 0:
-                    print("Error: Número total de posiciones debe ser par. Vuelve a intentarlo.")
+                    print("Error: Board size must have an even number of positions. Please try again.")
                 else:
                     return filas, columnas
             except ValueError:
-                print("Error: Introduce un número válido.")
+                print("Error: Enter a valid number.")
 
     '''
     createHiddenBoard() method. creates the board displayed to the player with no emojis.
