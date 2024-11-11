@@ -10,7 +10,7 @@ class Engine:
     attributes board, mode.
     '''
     def __init__(self):
-        print("WELCOME TO MEMORY GAME!")
+        print("WELCOME TO MEMORY GAME!\n")
         self.tablero = None
         self.modo = None
         self.jugadores = []
@@ -24,7 +24,7 @@ class Engine:
         filas, columnas = Board.pedir_dimensiones()
         self.tablero = Board(filas, columnas)
     
-        print("TABLERO INICIAL:")
+        print("\nTABLERO INICIAL\n")
         self.tablero.mostrarOculto()
     
         self.config()
@@ -35,22 +35,25 @@ class Engine:
     config() method. sets the game mode and the difficult level.
     '''
     def config(self):
+        print("---GAME MODE SELECTOR---")
         print("1. PLAYER 1 vs PLAYER 2 \n2. PLAYER vs CPU \n3. CPU vs CPU")
         self.modo = int(input("\nPlease choose a game mode: "))
 
         match self.modo:
             case 1:
-                self.jugadores.append(Player(input("Enter PLAYER 1 name: ")))
+                self.jugadores.append(Player(input("\nEnter PLAYER 1 name: ")))
                 self.jugadores.append(Player(input("Enter PLAYER 2 name: ")))
             case 2:
                 self.jugadores.append(Player(input("Enter PLAYER name: ")))
-                print("1. EASY \n2. MEDIUM \n3. HARD \n4. EXPERT")
+                print("\n---CPU LEVEL SELECTOR---")
+                print("\n1. EASY \n2. MEDIUM \n3. HARD \n4. EXPERT")
                 nivel = int(input("Please choose the CPU level: "))
                 cpu = Player("CPU", nivel)
                 cpu.elegir_cartas(self.tablero)
                 self.jugadores.append(cpu)
             case 3:
-                print("1. EASY \n2. MEDIUM \n3. HARD \n4. EXPERT")
+                print("---CPU LEVEL SELECTOR---")
+                print("\n1. EASY \n2. MEDIUM \n3. HARD \n4. EXPERT")
                 nivel = int(input("Please choose both CPU levels: "))
                 self.jugadores.append(Player("CPU 1", nivel))
                 self.jugadores.append(Player("CPU 2", nivel))
@@ -90,7 +93,7 @@ class Engine:
 
         while aciertos_actuales < aciertos_totales:
             jugador = j1 if turno == 1 else j2
-            print(f"\n{jugador.getName()}'S TURN")
+            print(f"\n{jugador.getName()}'s TURN")
         
             if jugador.nivel == 0: # Jugador
                 f1, c1 = self.pedir_coordenadas(tablero, "first", jugador)
@@ -101,14 +104,14 @@ class Engine:
                 tablero.mostrarOculto()
             else: # CPU
                 f1, c1 = jugador.elegir_cartas(tablero)
-                print(f"{jugador.getName()}'s first card is {f1 + 1}, {c1 + 1}:")
+                print(f"{jugador.getName()}'s first card is {f1 + 1}, {c1 + 1}.")
                 tablero.mostrar(f1, c1)
-                tablero.mostrarOculto()
+                # tablero.mostrarOculto()
                 if jugador.nivel >= 2:
                     jugador.recordar_carta(f1, c1, self.tablero.tablero_parejas[f1][c1])
                 time.sleep(2)
                 f2, c2 = jugador.elegir_cartas(tablero)
-                print(f"{jugador.getName()}'s second card is {f2 + 1}, {c2 + 1}:")
+                print(f"{jugador.getName()}'s second card is {f2 + 1}, {c2 + 1}.")
                 tablero.mostrar(f2, c2)
                 tablero.mostrarOculto()
                 if jugador.nivel >= 2:
@@ -132,6 +135,6 @@ class Engine:
         if j1.score > j2.score:
             print(f"{j1.name} wins with {j1.score} points!")
         elif j2.score > j1.score:
-            print(f"¡{j2.name} wins with {j2.score} points!")
+            print(f"{j2.name} wins with {j2.score} points!")
         else:
             print(f"It's a tie! Both players have {j1.score} points.")

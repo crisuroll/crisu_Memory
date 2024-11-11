@@ -51,7 +51,7 @@ class Player:
             case 1:
                 return self.elegir_aleatorio(tablero)
             case 2:
-                return self.elegir_con_memoria(tablero, limit=2)
+                return self.elegir_con_memoria(tablero)
             case 3:
                 return self.elegir_con_memoria(tablero)
             case 4:

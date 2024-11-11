@@ -73,6 +73,7 @@ class Board:
     def mostrarOculto(self):
         for i in self.tablero_oculto:
             print(" ".join(i))
+        print()
 
     '''
     showEmojis() method. prints the solved board.
